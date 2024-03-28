@@ -20,7 +20,7 @@ pub trait ScalarCompare {
     fn not_equals<T>(&self, val: T) -> Filter
     where
         T: Into<ConditionValue>;
-
+    
     fn contains<T>(&self, val: T) -> Filter
     where
         T: Into<ConditionValue>;
@@ -50,6 +50,10 @@ pub trait ScalarCompare {
         T: Into<ConditionValue>;
 
     fn less_than_or_equals<T>(&self, val: T) -> Filter
+    where
+        T: Into<ConditionValue>;
+
+    fn l2_distance<T>(&self, val: T) -> Filter
     where
         T: Into<ConditionValue>;
 

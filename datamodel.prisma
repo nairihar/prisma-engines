@@ -1,0 +1,10 @@
+datasource db {
+  provider = "postgresql"
+  url      = "postgres://u0t2ymae57x:Password123.@free.lantern.dev:5432/m9h9op9tgk"
+}
+
+model stories {
+  id    Int    @default(autoincrement()) @id
+  tags  Json
+  title String
+}

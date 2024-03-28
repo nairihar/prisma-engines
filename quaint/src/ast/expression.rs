@@ -359,6 +359,13 @@ impl<'a> Comparable<'a> for Expression<'a> {
         Compare::LessThanOrEquals(Box::new(self), Box::new(comparison.into()))
     }
 
+    fn l2_distance<T>(self, comparison: T) -> Compare<'a>
+    where
+        T: Into<Expression<'a>>,
+    {
+        Compare::L2Distance(Box::new(self), Box::new(comparison.into()))
+    }
+
     fn greater_than<T>(self, comparison: T) -> Compare<'a>
     where
         T: Into<Expression<'a>>,

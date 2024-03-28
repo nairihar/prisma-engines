@@ -764,6 +764,12 @@ pub trait Visitor<'a> {
         self.visit_expression(right)
     }
 
+    fn visit_l2_distance(&mut self, left: Expression<'a>, right: Expression<'a>) -> Result {
+        self.visit_expression(left)?;
+        self.write(" <-> ")?;
+        self.visit_expression(right)
+    }
+
     fn visit_like(&mut self, left: Expression<'a>, right: Expression<'a>) -> Result {
         self.visit_expression(left)?;
         self.write(" LIKE ")?;
@@ -787,6 +793,7 @@ pub trait Visitor<'a> {
             Compare::NotEquals(left, right) => self.visit_not_equals(*left, *right),
             Compare::LessThan(left, right) => self.visit_less_than(*left, *right),
             Compare::LessThanOrEquals(left, right) => self.visit_less_than_or_equals(*left, *right),
+            Compare::L2Distance(left, right) => self.visit_l2_distance(*left, *right),
             Compare::GreaterThan(left, right) => self.visit_greater_than(*left, *right),
             Compare::GreaterThanOrEquals(left, right) => self.visit_greater_than_or_equals(*left, *right),
             Compare::In(left, right) => match (*left, *right) {

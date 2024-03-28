@@ -146,6 +146,18 @@ impl ScalarCompare for ScalarFieldRef {
         })
     }
 
+    fn l2_distance<T>(&self, val: T) -> Filter
+    where
+        T: Into<ConditionValue>,
+    {
+        Filter::from(ScalarFilter {
+            projection: ScalarProjection::Single(self.clone()),
+            condition: ScalarCondition::L2Distance(val.into()),
+            mode: QueryMode::Default,
+        })
+    }
+
+
     /// Field is greater than the given value.
     fn greater_than<T>(&self, val: T) -> Filter
     where
@@ -342,6 +354,17 @@ impl ScalarCompare for ModelProjection {
         Filter::from(ScalarFilter {
             projection: ScalarProjection::Compound(self.scalar_fields().collect()),
             condition: ScalarCondition::LessThanOrEquals(val.into()),
+            mode: QueryMode::Default,
+        })
+    }
+    
+    fn l2_distance<T>(&self, val: T) -> Filter
+    where
+        T: Into<ConditionValue>,
+    {
+        Filter::from(ScalarFilter {
+            projection: ScalarProjection::Compound(self.scalar_fields().collect()),
+            condition: ScalarCondition::L2Distance(val.into()),
             mode: QueryMode::Default,
         })
     }
@@ -542,6 +565,17 @@ impl ScalarCompare for FieldSelection {
         Filter::from(ScalarFilter {
             projection: ScalarProjection::Compound(self.as_scalar_fields().expect("Todo composites in filters.")),
             condition: ScalarCondition::LessThanOrEquals(val.into()),
+            mode: QueryMode::Default,
+        })
+    }
+
+    fn l2_distance<T>(&self, val: T) -> Filter
+    where
+        T: Into<ConditionValue>,
+    {
+        Filter::from(ScalarFilter {
+            projection: ScalarProjection::Compound(self.as_scalar_fields().expect("Todo composites in filters.")),
+            condition: ScalarCondition::L2Distance(val.into()),
             mode: QueryMode::Default,
         })
     }

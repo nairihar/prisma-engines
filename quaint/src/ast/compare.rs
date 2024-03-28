@@ -13,6 +13,8 @@ pub enum Compare<'a> {
     LessThan(Box<Expression<'a>>, Box<Expression<'a>>),
     /// `left <= right`
     LessThanOrEquals(Box<Expression<'a>>, Box<Expression<'a>>),
+    /// `left <-> right`
+    L2Distance(Box<Expression<'a>>, Box<Expression<'a>>),
     /// `left > right`
     GreaterThan(Box<Expression<'a>>, Box<Expression<'a>>),
     /// `left >= right`
@@ -328,6 +330,10 @@ pub trait Comparable<'a> {
     /// # }
     /// ```
     fn less_than_or_equals<T>(self, comparison: T) -> Compare<'a>
+    where
+        T: Into<Expression<'a>>;
+
+    fn l2_distance<T>(self, comparison: T) -> Compare<'a>
     where
         T: Into<Expression<'a>>;
 
@@ -858,6 +864,15 @@ where
         let col: Column<'a> = self.into();
         let val: Expression<'a> = col.into();
         val.less_than_or_equals(comparison)
+    }
+
+    fn l2_distance<T>(self, comparison: T) -> Compare<'a>
+    where
+        T: Into<Expression<'a>>,
+    {
+        let col: Column<'a> = self.into();
+        let val: Expression<'a> = col.into();
+        val.l2_distance(comparison)
     }
 
     fn greater_than<T>(self, comparison: T) -> Compare<'a>

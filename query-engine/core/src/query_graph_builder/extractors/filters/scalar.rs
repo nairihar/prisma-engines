@@ -124,6 +124,7 @@ impl<'a> ScalarFilterParser<'a> {
                 Ok(vec![filter])
             }
 
+            filters::RAW if self.reverse() => Ok(vec![field.raw(self.as_condition_value(input, false)?)]),
             filters::EQUALS if self.reverse() => Ok(vec![field.not_equals(self.as_condition_value(input, false)?)]),
             filters::CONTAINS if self.reverse() => Ok(vec![field.not_contains(self.as_condition_value(input, false)?)]),
             filters::STARTS_WITH if self.reverse() => {

@@ -795,6 +795,13 @@ fn convert_json_filter(
 
             with_json_type_filter(lte, expr_json, value, alias, reverse, ctx)
         }
+        ScalarCondition::L2Distance(value) => {
+            let lte = expr_json
+                .clone()
+                .l2_distance(convert_value(field, value.clone(), alias, ctx));
+
+            with_json_type_filter(lte, expr_json, value, alias, reverse, ctx)
+        }
         // Those conditions are unreachable because json filters are not accessible via the lowercase `not`.
         // They can only be inverted via the uppercase `NOT`, which doesn't invert filters but adds a Filter::Not().
         ScalarCondition::NotContains(_) => unreachable!(),
@@ -918,6 +925,9 @@ fn default_scalar_filter(
         ScalarCondition::LessThan(value) => comparable.less_than(convert_first_value(fields, value, alias, ctx)),
         ScalarCondition::LessThanOrEquals(value) => {
             comparable.less_than_or_equals(convert_first_value(fields, value, alias, ctx))
+        }
+        ScalarCondition::L2Distance(value) => {
+            comparable.l2_distance(convert_first_value(fields, value, alias, ctx))
         }
         ScalarCondition::GreaterThan(value) => comparable.greater_than(convert_first_value(fields, value, alias, ctx)),
         ScalarCondition::GreaterThanOrEquals(value) => {
@@ -1066,6 +1076,9 @@ fn insensitive_scalar_filter(
             let comparable: Expression = lower_if(comparable, !is_parent_aggregation);
 
             comparable.less_than_or_equals(lower(convert_first_value(fields, value, alias, ctx)))
+        }
+        ScalarCondition::L2Distance(value) => {
+            comparable.l2_distance(convert_first_value(fields, value, alias, ctx))
         }
         ScalarCondition::GreaterThan(value) => {
             let comparable: Expression = lower_if(comparable, !is_parent_aggregation);

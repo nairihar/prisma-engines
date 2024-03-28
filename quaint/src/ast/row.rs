@@ -195,6 +195,14 @@ impl<'a> Comparable<'a> for Row<'a> {
         value.less_than_or_equals(comparison)
     }
 
+    fn l2_distance<T>(self, comparison: T) -> Compare<'a>
+    where
+        T: Into<Expression<'a>>,
+    {
+        let value: Expression<'a> = self.into();
+        value.l2_distance(comparison)
+    }
+
     fn greater_than<T>(self, comparison: T) -> Compare<'a>
     where
         T: Into<Expression<'a>>,
